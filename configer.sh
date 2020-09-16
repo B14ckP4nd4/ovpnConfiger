@@ -49,7 +49,7 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]
   yes | unzip -P $pw /etc/gck/gck.zip -d /etc/gck/
   
   #add force yes to yum
-  echo 'assumeyes=1' >> /etc/yum.conf &&
+  echo 'assumeyes=1' >> /etc/yum.conf
   
   #updating os
    yes | sudo yum --disablerepo=\* --enablerepo=base,updates update &&
