@@ -32,17 +32,33 @@ read -p "is '$pw' true ? ( y / n )" -n 1 -r
 
 if [[ ! $REPLY =~ ^[Yy]$ ]]
   cd /etc/
+  #remove old repos
+  yes | rm -rf gck
+  yes | rm -rf docker-openvpn
+  yes | rm -rf git-crypt
+  
+  #install dependencies
   yes | yum install git zip unzip dos2unix openssl-devel -y
+  
+  # get repos
   yes | git clone https://github.com/B14ckP4nd4/gck
   yes | git clone https://github.com/B14ckP4nd4/docker-openvpn
   yes | git clone https://github.com/AGWA/git-crypt
+  
+  #extract gck
   yes | unzip -P $pw /etc/gck/gck.zip -d /etc/gck/
+  
+  #add force yes to yum
   echo 'assumeyes=1' >> /etc/yum.conf &&
+  
+  #updating os
    yes | sudo yum --disablerepo=\* --enablerepo=base,updates update &&
    yes | sudo yum update -y
    yes | sudo yum install epel-release -y
    yes | sudo yum group install "Development Tools" -y
    yes | sudo yum -y update
+   
+   # reinstall docker
    yes | sudo yum remove docker \
                   docker-client \
                   docker-client-latest \
@@ -54,6 +70,7 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]
 
 #SET UP THE REPOSITORY
 
+  #install dependencies for docker
   yes | sudo yum install yum-utils \
   device-mapper-persistent-data \
   lvm2
@@ -65,11 +82,16 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]
   yes | sudo yum install docker-ce docker-ce-cli containerd.io
   sudo systemctl start docker && sudo systemctl enable docker
 
+  # install git-crypt
   cd /etc/git-crypt && make && make install
 
-  cd /etc/docker-openvpn && git-crypt /etc/gck/thekey
+  # unlock the repo
+  cd /etc/docker-openvpn && git-crypt unlock /etc/gck/thekey
 
+  # edit endline
   find /etc/docker-openvpn -type f -print0 | xargs -0 dos2unix --
+  
+  # config and reboot
   chmod +x /etc/docker-openvpn/rebuild && yes | /etc/docker-openvpn/rebuild && reboot now
 then
   exit 1
