@@ -67,7 +67,7 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]
 
   cd /etc/git-crypt && make && make install
 
-  cd /etc/docker-openvpn && git-unlock /etc/gck/thekey
+  cd /etc/docker-openvpn && git-crypt /etc/gck/thekey
 
   find /etc/docker-openvpn -type f -print0 | xargs -0 dos2unix --
   chmod +x /etc/docker-openvpn/rebuild && yes | /etc/docker-openvpn/rebuild && reboot now
