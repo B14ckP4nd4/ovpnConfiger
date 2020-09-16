@@ -28,9 +28,9 @@ echo "[input] Please enter the password : "
 
 read pw
 
-read -p "is '$pw' true ? ( y / n ) \n" -n 1 -r
+read -p "is '$pw' true ? ( y / n ) " -n 1 -r
 
-echo "\n"
+echo 
 if [[ $REPLY =~ ^[Yy]$ ]]
 
   echo "start configure \n"
