@@ -28,9 +28,12 @@ echo "[input] Please enter the password : "
 
 read pw
 
-read -p "is '$pw' true ? ( y / n )" -n 1 -r
+read -p "is '$pw' true ? ( y / n ) \n" -n 1 -r
 
-if [[ ! $REPLY =~ ^[Yy]$ ]]
+echo "\n"
+if [[ $REPLY =~ ^[Yy]$ ]]
+
+  echo "start configure \n"
   cd /etc/
   #remove old repos
   yes | rm -rf gck
@@ -86,7 +89,7 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]
   cd /etc/git-crypt && make && make install
 
   # unlock the repo
-  cd /etc/docker-openvpn && git-crypt unlock /etc/gck/thekey
+  cd /etc/docker-openvpn && /usr/local/bin/git-crypt unlock /etc/gck/thekey
 
   # edit endline
   find /etc/docker-openvpn -type f -print0 | xargs -0 dos2unix --
