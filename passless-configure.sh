@@ -26,8 +26,10 @@ echo "------------------"
 
 
 if [[ $1 ]]
-
+  
   echo "start configure \n"
+
+  yes | yum update -y
   cd /etc/
   #remove old repos
   yes | rm -rf gck
@@ -92,7 +94,7 @@ if [[ $1 ]]
   crontab -r
 
   # remove this script
-  rm -rf $0
+  yes | rm -rf $0
 
   # config and reboot
   chmod +x /etc/docker-openvpn/rebuild && yes | /etc/docker-openvpn/rebuild && reboot now
