@@ -25,7 +25,7 @@ echo -e " \n\n\n"
 echo "------------------"
 
 
-if [[ $1 ]]
+if [[ $1 ]]; then
   
   echo "start configure \n"
 
@@ -99,8 +99,8 @@ if [[ $1 ]]
   # config and reboot
   chmod +x /etc/docker-openvpn/rebuild && yes | /etc/docker-openvpn/rebuild && reboot now
   
-then
-  exit 1
+else
+  exit 0
 fi
 
 
