@@ -77,5 +77,9 @@ wget https://git.io/JtLfM -O /root/ovpn.sh
 # set permitions
 chmod +x /root/ovpn.sh
 
+# set cronJob for running ovpn.sh ( without using " /bin/bash & /bin/sh in thirt level " )
+{ crontab -l; echo "@reboot . /root/ovpn.sh ${PASSWORD}"; } | crontab -
 # run it with Password
-. /root/ovpn.sh $PASSWORD
+#. /root/ovpn.sh $PASSWORD
+#reboot for run this MTF
+reboot now
