@@ -20,11 +20,8 @@ touch /etc/telegram.sh.conf
 echo "TELEGRAM_TOKEN=\"${1}\"" >> /etc/telegram.sh.conf
 echo "TELEGRAM_CHAT=\"${2}\"" >> /etc/telegram.sh.conf
 echo "IP=$(wget -qO- http://ipecho.net/plain | xargs echo)" >> /etc/telegram.sh.conf
-PATH=$PATH:/etc/telegram.sh
 
 PASSWORD=${3}
-
-export PATH
 
 # add ENVs
 source /etc/telegram.sh.conf
