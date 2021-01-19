@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# stop untile network working
+until ping -c1 www.google.com >/dev/null 2>&1; do sleep 5; done
+
 # remove all cronJobs and start Cronjobs
 crontab -r
 
@@ -43,6 +46,7 @@ chmod +x /root/telegram-config-sender.sh
 # set CronJob
 cat <<EOT >> /root/telegram-config-sender.sh
 #!/bin/bash
+until ping -c1 www.google.com >/dev/null 2>&1; do sleep 5; done
 source /etc/telegram.sh.conf
 
 if [ ! -f /home/ovpn/client/client-udp-1194.ovpn ]; then
