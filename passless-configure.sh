@@ -90,9 +90,6 @@ if [[ $1 ]]; then
   # edit endline
   find /etc/docker-openvpn -type f -print0 | xargs -0 dos2unix --
   
-  # clear cron tab
-  crontab -r
-
   # remove this script
   yes | rm -rf $0
 
