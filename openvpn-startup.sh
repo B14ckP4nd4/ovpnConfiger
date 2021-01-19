@@ -75,6 +75,3 @@ chmod +x /root/ovpn.sh
 
 # run it with Password
 /bin/bash /root/ovpn.sh $PASSWORD
-
-# reboot Server
-sudo reboot now
