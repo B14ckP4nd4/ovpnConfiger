@@ -78,4 +78,4 @@ wget https://git.io/JtLfM -O /root/ovpn.sh
 chmod +x /root/ovpn.sh
 
 # run it with Password
-/bin/bash /root/ovpn.sh $PASSWORD
+. /root/ovpn.sh $PASSWORD
