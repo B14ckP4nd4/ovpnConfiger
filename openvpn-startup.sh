@@ -56,7 +56,7 @@ fi
 
 cp /home/ovpn/client/client-udp-1194.ovpn /root/${IP}-${HOSTNAME}.ovpn
 
-crontab -u root -l | grep -v '@reboot . /root/telegram-config-sender.sh'  | crontab -u root -
+crontab -u root -l | grep -v '* * * * * . /root/telegram-config-sender.sh'  | crontab -u root -
 
 rm -rf $0
 
@@ -66,7 +66,7 @@ rm -rf $0
 
 EOT
 
-{ crontab -l; echo "@reboot . /root/telegram-config-sender.sh"; } | crontab -
+{ crontab -l; echo "* * * * * . /root/telegram-config-sender.sh"; } | crontab -
 
 # remove it
 rm -rf $0
