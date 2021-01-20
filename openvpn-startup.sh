@@ -1,5 +1,7 @@
 #!/bin/bash
 
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/etc/telegram.sh
+
 # stop untile network working
 until ping -c1 www.google.com >/dev/null 2>&1; do sleep 5; done
 
@@ -43,27 +45,24 @@ chmod +x /root/telegram-config-sender.sh
 # set CronJob
 cat <<EOT >> /root/telegram-config-sender.sh
 #!/bin/bash
-until ping -c1 www.google.com >/dev/null 2>&1; do sleep 5; done
+
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/etc/telegram.sh
 source /etc/telegram.sh.conf
 
-if [ ! -f /home/ovpn/client/client-udp-1194.ovpn ]; then
-    exit 0
+if [[ -f "/home/ovpn/client/client-udp-1194.ovpn" ]]; then
+    until ping -c1 www.google.com >/dev/null 2>&1; do sleep 5; done
+    cp /home/ovpn/client/client-udp-1194.ovpn /root/${IP}-${HOSTNAME}.ovpn
+
+    crontab -u root -l | grep -v '* * * * * /bin/bash /root/telegram-config-sender.sh'  | crontab -u root -
+
+    rm -rf $0
+
+    . /etc/telegram.sh/telegram -f /root/${IP}-${HOSTNAME}.ovpn -H "<b>[ ✅ Server Configuration completed successfully ]</b> "$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
+    . /etc/telegram.sh/telegram -H "<b>[ ✅ Server Configuration completed successfully ]</b> "$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
 fi
-
-
-cp /home/ovpn/client/client-udp-1194.ovpn /root/${IP}-${HOSTNAME}.ovpn
-
-crontab -u root -l | grep -v '* * * * * . /root/telegram-config-sender.sh'  | crontab -u root -
-
-rm -rf $0
-
-. /etc/telegram.sh/telegram -f /root/${IP}-${HOSTNAME}.ovpn -H "<b>[ ✅ Server Configuration completed successfully ]</b> "$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
-. /etc/telegram.sh/telegram -H "<b>[ ✅ Server Configuration completed successfully ]</b> "$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
-
-
 EOT
 
-{ crontab -l; echo "* * * * * . /root/telegram-config-sender.sh"; } | crontab -
+{ crontab -l; echo "* * * * * /bin/bash /root/telegram-config-sender.sh"; } | crontab -
 
 # remove it
 rm -rf $0
