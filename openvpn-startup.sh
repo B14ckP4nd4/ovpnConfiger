@@ -53,6 +53,8 @@ chmod +x /root/telegram-config-sender.sh
 cat <<EOT >> /root/telegram-config-sender.sh
 #!/bin/bash
 
+set -ex
+
 PATH=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/etc/telegram.sh
 source /etc/telegram.sh.conf
 
