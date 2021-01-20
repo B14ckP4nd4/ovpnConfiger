@@ -8,13 +8,6 @@ source /etc/profile
 # restore SHELL env var for cron
 SHELL=/bin/bash
 
-
-# stop untile network working
-until ping -c1 www.google.com >/dev/null 2>&1; do sleep 5; done
-
-# remove all cronJobs and start Cronjobs
-crontab -r
-
 # install git
 yes | yum install git -y
 
@@ -69,8 +62,6 @@ if [[ -f "/home/ovpn/client/client-udp-1194.ovpn" ]]; then
     && rm -rf $0
 fi
 EOT
-
-{ crontab -l; echo "* * * * * /bin/bash /root/telegram-config-sender.sh"; } | crontab -
 
 # remove it
 rm -rf $0
