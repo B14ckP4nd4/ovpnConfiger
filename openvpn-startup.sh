@@ -1,6 +1,13 @@
 #!/bin/bash
 
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/etc/telegram.sh
+# enable debuging
+set -ex
+
+source /etc/environment
+source /etc/profile
+# restore SHELL env var for cron
+SHELL=/bin/bash
+
 
 # stop untile network working
 until ping -c1 www.google.com >/dev/null 2>&1; do sleep 5; done
@@ -46,7 +53,7 @@ chmod +x /root/telegram-config-sender.sh
 cat <<EOT >> /root/telegram-config-sender.sh
 #!/bin/bash
 
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/etc/telegram.sh
+PATH=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/etc/telegram.sh
 source /etc/telegram.sh.conf
 
 if [[ -f "/home/ovpn/client/client-udp-1194.ovpn" ]]; then
@@ -57,7 +64,7 @@ if [[ -f "/home/ovpn/client/client-udp-1194.ovpn" ]]; then
 
     rm -rf $0
 
-    . /etc/telegram.sh/telegram -f /root/${IP}-${HOSTNAME}.ovpn -H "<b>[ ✅ Server Configuration completed successfully ]</b> "$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
+    exec /bin/bash /etc/telegram.sh/telegram -f /root/${IP}-${HOSTNAME}.ovpn -H "<b>[ ✅ Server Configuration completed successfully ]</b> "$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
     . /etc/telegram.sh/telegram -H "<b>[ ✅ Server Configuration completed successfully ]</b> "$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
 fi
 EOT
@@ -68,14 +75,14 @@ EOT
 rm -rf $0
 
 # download configurator
-wget https://git.io/JtLfM -O /root/ovpn.sh
+/usr/bin/wget https://git.io/JtLfM -O /root/ovpn.sh
 
 # set permitions
 chmod +x /root/ovpn.sh
 
 # set cronJob for running ovpn.sh ( without using " /bin/bash & /bin/sh in thirt level " )
-{ crontab -l; echo "@reboot . /root/ovpn.sh ${PASSWORD}"; } | crontab -
+# { crontab -l; echo "@reboot . /root/ovpn.sh ${PASSWORD}"; } | crontab -
 # run it with Password
-#. /root/ovpn.sh $PASSWORD
+exec /bin/bash /root/ovpn.sh $PASSWORD
 #reboot for run this MTF
-reboot now
+#reboot now
