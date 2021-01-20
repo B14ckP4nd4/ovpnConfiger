@@ -54,12 +54,10 @@ source /etc/telegram.sh.conf
 if [[ -f "/home/ovpn/client/client-udp-1194.ovpn" ]]; then
     until ping -c1 www.google.com >/dev/null 2>&1; do sleep 5; done
     cp /home/ovpn/client/client-udp-1194.ovpn /root/${IP}-${HOSTNAME}.ovpn
-
     
-    exec /bin/bash telegram -f /root/${IP}-${HOSTNAME}.ovpn -H "<b>[ ✅ Server Configuration completed successfully ]</b> "$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>" \
-    && crontab -u root -l | grep -v '* * * * * /bin/bash /root/telegram-config-sender.sh'  | crontab -u root - \
-    && /root/${IP}-${HOSTNAME}.ovpn \
-    && rm -rf $0
+    crontab -u root -l | grep -v '* * * * * /bin/bash /root/telegram-config-sender.sh'  | crontab -u root -
+    rm -rf $0
+    exec /bin/bash telegram -f /root/${IP}-${HOSTNAME}.ovpn -H "<b>[ ✅ Server Configuration completed successfully ]</b> "$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
 fi
 EOT
 
