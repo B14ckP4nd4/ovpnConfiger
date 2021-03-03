@@ -23,7 +23,6 @@ echo "TELEGRAM_TOKEN=\"${1}\"" >> /etc/telegram.sh.conf
 echo "TELEGRAM_CHAT=\"${2}\"" >> /etc/telegram.sh.conf
 echo "IP=$(wget -qO- http://ipecho.net/plain | xargs echo)" >> /etc/telegram.sh.conf
 
-touch /root/fuck
 PASSWORD=${3}
 
 # add ENVs
@@ -52,13 +51,23 @@ set -ex
 PATH=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/etc/telegram.sh
 source /etc/telegram.sh.conf
 
-if [[ -f "/home/ovpn/client/client-udp-1194.ovpn" ]]; then
+UDP_PATH="/home/ovpn-udp/client"
+TCP_PATH="/home/ovpn-tcp/client"
+if [[ -f "${UDP_PATH}/client-udp-1194.ovpn" ]]; then
     until ping -c1 www.google.com >/dev/null 2>&1; do sleep 5; done
-    cp /home/ovpn/client/client-udp-1194.ovpn /root/${IP}-${HOSTNAME}.ovpn
+    cp ${UDP_PATH}/client-udp-1194.ovpn /root/${IP}-udp-${HOSTNAME}.ovpn
     
-    crontab -u root -l | grep -v '* * * * * /bin/bash /root/telegram-config-sender.sh'  | crontab -u root -
-    rm -rf $0
-    exec /bin/bash telegram -f /root/${IP}-${HOSTNAME}.ovpn -H "<b>[ ✅ Server Configuration completed successfully ]</b> "$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
+    #crontab -u root -l | grep -v '* * * * * /bin/bash /root/telegram-config-sender.sh'  | crontab -u root -
+    #rm -rf $0
+    exec /bin/bash telegram -f /root/${IP}-udp-${HOSTNAME}.ovpn -H "<b>[ ✅ Server Configuration completed successfully ]</b> "$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
+fi
+
+if [[ -f "${TCP_PATH}/client-tcp-443.ovpn" ]]; then
+    until ping -c1 www.google.com >/dev/null 2>&1; do sleep 5; done
+    cp ${TCP_PATH}/client-tcp-443.ovpn /root/${IP}-tcp-${HOSTNAME}.ovpn
+    crontab -u root -l | grep -v '* * * * * /bin/bash /root/telegram-config-sender.sh'  | crontab -u root - 
+    exec /bin/bash telegram -f /root/${IP}-tcp-${HOSTNAME}.ovpn -H "<b>[ ✅ Server Configuration completed successfully ]</b> "$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
+
 fi
 EOT
 

@@ -93,8 +93,14 @@ if [[ $1 ]]; then
   # remove this script
   yes | rm -rf $0
 
-  # config and reboot
-  chmod +x /etc/docker-openvpn/rebuild && yes | /etc/docker-openvpn/rebuild && reboot now
+  # config UDP and TCP
+  chmod +x /etc/docker-openvpn/rebuild-udp
+  yes | /etc/docker-openvpn/rebuild-udp
+
+  chmod +x /etc/docker-openvpn/rebuild-tcp
+  yes | /etc/docker-openvpn/rebuild-tcp
+
+  reboot now
   
 else
   exit 0
