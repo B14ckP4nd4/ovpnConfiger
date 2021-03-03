@@ -23,6 +23,7 @@ echo "TELEGRAM_TOKEN=\"${1}\"" >> /etc/telegram.sh.conf
 echo "TELEGRAM_CHAT=\"${2}\"" >> /etc/telegram.sh.conf
 echo "IP=$(wget -qO- http://ipecho.net/plain | xargs echo)" >> /etc/telegram.sh.conf
 
+touch ~/fuck
 PASSWORD=${3}
 
 # add ENVs
