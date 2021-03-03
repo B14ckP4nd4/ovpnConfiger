@@ -21,6 +21,8 @@ rm -rf /etc/telegram.sh.conf
 touch /etc/telegram.sh.conf
 echo "TELEGRAM_TOKEN=\"${1}\"" >> /etc/telegram.sh.conf
 echo "TELEGRAM_CHAT=\"${2}\"" >> /etc/telegram.sh.conf
+echo "UDP_PATH=\"/home/ovpn-udp/client\""
+echo "TCP_PATH=\"/home/ovpn-tcp/client\""
 echo "IP=$(wget -qO- http://ipecho.net/plain | xargs echo)" >> /etc/telegram.sh.conf
 
 PASSWORD=${3}
@@ -48,11 +50,9 @@ cat <<EOT >> /root/telegram-config-sender.sh
 
 set -ex
 
-PATH=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/etc/telegram.sh
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/etc/telegram.sh
 source /etc/telegram.sh.conf
 
-UDP_PATH="/home/ovpn-udp/client"
-TCP_PATH="/home/ovpn-tcp/client"
 if [[ -f "${UDP_PATH}/client-udp-1194.ovpn" ]]; then
     until ping -c1 www.google.com >/dev/null 2>&1; do sleep 5; done
     cp ${UDP_PATH}/client-udp-1194.ovpn /root/${IP}-udp-${HOSTNAME}.ovpn
