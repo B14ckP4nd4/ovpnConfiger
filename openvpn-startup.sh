@@ -53,18 +53,18 @@ set -ex
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/etc/telegram.sh
 source /etc/telegram.sh.conf
 
-if [[ -f "${UDP_PATH}/client-udp-1194.ovpn" ]]; then
+if [[ -f "/home/ovpn-udp/client/client-udp-1194.ovpn" ]]; then
     until ping -c1 www.google.com >/dev/null 2>&1; do sleep 5; done
-    cp ${UDP_PATH}/client-udp-1194.ovpn /root/${IP}-udp-${HOSTNAME}.ovpn
+    cp /home/ovpn-udp/client/client-udp-1194.ovpn /root/${IP}-udp-${HOSTNAME}.ovpn
     
     #crontab -u root -l | grep -v '* * * * * /bin/bash /root/telegram-config-sender.sh'  | crontab -u root -
     #rm -rf $0
     exec /bin/bash telegram -f /root/${IP}-udp-${HOSTNAME}.ovpn -H "<b>[ ✅ Server Configuration completed successfully ]</b> "$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
 fi
 
-if [[ -f "${TCP_PATH}/client-tcp-443.ovpn" ]]; then
+if [[ -f "/home/ovpn-tcp/client/client-tcp-443.ovpn" ]]; then
     until ping -c1 www.google.com >/dev/null 2>&1; do sleep 5; done
-    cp ${TCP_PATH}/client-tcp-443.ovpn /root/${IP}-tcp-${HOSTNAME}.ovpn
+    cp /home/ovpn-tcp/client/client-tcp-443.ovpn /root/${IP}-tcp-${HOSTNAME}.ovpn
     crontab -u root -l | grep -v '* * * * * /bin/bash /root/telegram-config-sender.sh'  | crontab -u root - 
     exec /bin/bash telegram -f /root/${IP}-tcp-${HOSTNAME}.ovpn -H "<b>[ ✅ Server Configuration completed successfully ]</b> "$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
 
