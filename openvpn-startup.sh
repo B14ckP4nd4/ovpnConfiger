@@ -21,8 +21,8 @@ rm -rf /etc/telegram.sh.conf
 touch /etc/telegram.sh.conf
 echo "TELEGRAM_TOKEN=\"${1}\"" >> /etc/telegram.sh.conf
 echo "TELEGRAM_CHAT=\"${2}\"" >> /etc/telegram.sh.conf
-echo "UDP_PATH=\"/home/ovpn-udp/client\""
-echo "TCP_PATH=\"/home/ovpn-tcp/client\""
+echo "UDP_PATH=\"/home/ovpn-udp/client\"" >> /etc/telegram.sh.conf
+echo "TCP_PATH=\"/home/ovpn-tcp/client\"" >> /etc/telegram.sh.conf
 echo "IP=$(wget -qO- http://ipecho.net/plain | xargs echo)" >> /etc/telegram.sh.conf
 
 PASSWORD=${3}
@@ -53,23 +53,23 @@ set -ex
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/etc/telegram.sh
 source /etc/telegram.sh.conf
 
-if [[ -f "/home/ovpn-udp/client/client-udp-1194.ovpn" ]]; then
+if [[ -f "${UDP_PATH}/client-udp-1194.ovpn" ]] && [[ -f "${TCP_PATH}/client-tcp-443.ovpn" ]]
+then
+    # wait for network
     until ping -c1 www.google.com >/dev/null 2>&1; do sleep 5; done
-    cp /home/ovpn-udp/client/client-udp-1194.ovpn /root/${IP}-udp-${HOSTNAME}.ovpn
-    
-    #crontab -u root -l | grep -v '* * * * * /bin/bash /root/telegram-config-sender.sh'  | crontab -u root -
-    #rm -rf $0
-    exec /bin/bash telegram -f /root/${IP}-udp-${HOSTNAME}.ovpn -H "<b>[ ✅ Server Configuration completed successfully ]</b> "$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
-    rm -rf /home/ovpn-udp/client/client-udp-1194.ovpn
+
+    # send them to telegram
+    exec /bin/bash telegram -f ${UDP_PATH}/client-udp-1194.ovpn -H "<b>[ ✅ Connection is Ready! ]</b> "$'\n\n'"🔵 UDP Protocol "$'\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
+    exec /bin/bash telegram -f ${TCP_PATH}/client-tcp-443.ovpn -H "<b>[ ✅ Connection is Ready! ]</b> "$'\n\n'"🔴 TCP Protocol "$'\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
+
+    # disable cronjob
+    crontab -u root -l | grep -v '* * * * * /bin/bash /root/telegram-config-sender.sh'  | crontab -u root -
+
+    # remove this script
+    rm -rf $0
+
 fi
 
-if [[ -f "/home/ovpn-tcp/client/client-tcp-443.ovpn" ]]; then
-    until ping -c1 www.google.com >/dev/null 2>&1; do sleep 5; done
-    cp /home/ovpn-tcp/client/client-tcp-443.ovpn /root/${IP}-tcp-${HOSTNAME}.ovpn
-    crontab -u root -l | grep -v '* * * * * /bin/bash /root/telegram-config-sender.sh'  | crontab -u root - 
-    exec /bin/bash telegram -f /root/${IP}-tcp-${HOSTNAME}.ovpn -H "<b>[ ✅ Server Configuration completed successfully ]</b> "$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
-    rm -rf /home/ovpn-tcp/client/client-tcp-443.ovpn
-fi
 EOT
 
 # remove it
