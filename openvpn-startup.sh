@@ -76,6 +76,8 @@ if [[ -f "/root/udp-sent" ]]; then
     # disable cronjob
     crontab -u root -l | grep -v '* * * * * /bin/bash /root/udp-config-sender.sh'  | crontab -u root -
 
+    exit 1
+
 fi
 
 if [[ -f "${UDP_PATH}/client-udp-1194.ovpn" ]]; then
@@ -108,6 +110,8 @@ if [[ -f "/root/tcp-sent" ]]; then
 
     # disable cronjob
     crontab -u root -l | grep -v '* * * * * /bin/bash /root/tcp-config-sender.sh'  | crontab -u root -
+
+    exit 1
 fi
 
 if [[ -f "${TCP_PATH}/client-tcp-443.ovpn" ]]; then
