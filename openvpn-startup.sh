@@ -67,19 +67,26 @@ set -ex
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/etc/telegram.sh
 source /etc/telegram.sh.conf
 
-if [[ -f "${UDP_PATH}/client-udp-1194.ovpn" ]]; then
-    # wait for network
-    until ping -c1 www.google.com >/dev/null 2>&1; do sleep 5; done
+if [[ -f "/root/udp-sent" ]]; then
 
-    # send them to telegram
-    exec /bin/bash telegram -f ${UDP_PATH}/client-udp-1194.ovpn -H "<b>[ ✅ Connection is Ready! ]</b> "$'\n\n'"🔵 UDP Protocol "$'\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
+    # remove scripts
+    rm -rf /root/udp-sent
+    rm -rf $0
 
     # disable cronjob
     crontab -u root -l | grep -v '* * * * * /bin/bash /root/udp-config-sender.sh'  | crontab -u root -
 
-    # remove this script
-    rm -rf $0
+fi
 
+if [[ -f "${UDP_PATH}/client-udp-1194.ovpn" ]]; then
+    # wait for network
+    until ping -c1 www.google.com >/dev/null 2>&1; do sleep 5; done
+
+
+    touch /root/udp-sent
+
+    # send them to telegram
+    exec /bin/bash telegram -f ${UDP_PATH}/client-udp-1194.ovpn -H "<b>[ ✅ Connection is Ready! ]</b> "$'\n\n'"🔵 UDP Protocol "$'\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
 fi
 
 EOT
@@ -92,18 +99,26 @@ set -ex
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/etc/telegram.sh
 source /etc/telegram.sh.conf
 
+
+if [[ -f "/root/tcp-sent" ]]; then
+
+    #remove scripts
+    rm -rf /root/tcp-sent
+    rm -rf $0
+
+    # disable cronjob
+    crontab -u root -l | grep -v '* * * * * /bin/bash /root/tcp-config-sender.sh'  | crontab -u root -
+fi
+
 if [[ -f "${TCP_PATH}/client-tcp-443.ovpn" ]]; then
     # wait for network
     until ping -c1 www.google.com >/dev/null 2>&1; do sleep 5; done
 
+    touch /root/tcp-sent
+
     # send them to telegram
     exec /bin/bash telegram -f ${TCP_PATH}/client-tcp-443.ovpn -H "<b>[ ✅ Connection is Ready! ]</b> "$'\n\n'"🔴 TCP Protocol "$'\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
 
-    # disable cronjob
-    crontab -u root -l | grep -v '* * * * * /bin/bash /root/tcp-config-sender.sh'  | crontab -u root -
-
-    # remove this script
-    rm -rf $0
 
 fi
 
