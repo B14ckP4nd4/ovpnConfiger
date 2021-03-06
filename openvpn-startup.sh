@@ -45,6 +45,18 @@ touch /root/{udp,tcp}-config-sender.sh
 chmod +x /root/{udp,tcp}-config-sender.sh
 
 
+cat <<EOT >> /root/telegram-config-sender.sh
+#!/usr/bin/env bash
+
+   { crontab -l; echo "* * * * * /bin/bash /root/udp-config-sender.sh"; } | crontab -
+   { crontab -l; echo "* * * * * /bin/bash /root/tcp-config-sender.sh"; } | crontab -
+   crontab -u root -l | grep -v '* * * * * /bin/bash /root/telegram-config-sender.sh'  | crontab -u root -
+
+    # self destroy
+   rm -rf $0
+
+EOT
+
 
 # set CronJob
 cat <<EOT >> /root/udp-config-sender.sh
