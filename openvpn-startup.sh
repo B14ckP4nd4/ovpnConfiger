@@ -84,11 +84,12 @@ if [[ -f "${UDP_PATH}/client-udp-1194.ovpn" ]]; then
     # wait for network
     until ping -c1 www.google.com >/dev/null 2>&1; do sleep 5; done
 
+    cp ${TCP_PATH}/client-udp-443.ovpn /root/${HOSTNAME}-${IP}-udp.ovpn
 
     touch /root/udp-sent
 
     # send them to telegram
-    exec /bin/bash telegram -f ${UDP_PATH}/client-udp-1194.ovpn -H "<b>[ ✅ Connection is Ready! ]</b> "$'\n\n'"🔵 UDP Protocol "$'\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
+    exec /bin/bash telegram -f /root/${HOSTNAME}-${IP}-udp.ovpn -H "<b>[ ✅ Connection is Ready! ]</b> "$'\n\n'"🔵 UDP Protocol "$'\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
 fi
 
 EOT
@@ -117,11 +118,11 @@ fi
 if [[ -f "${TCP_PATH}/client-tcp-443.ovpn" ]]; then
     # wait for network
     until ping -c1 www.google.com >/dev/null 2>&1; do sleep 5; done
-
+    cp ${TCP_PATH}/client-tcp-443.ovpn /root/${HOSTNAME}-${IP}-tcp.ovpn
     touch /root/tcp-sent
 
     # send them to telegram
-    exec /bin/bash telegram -f ${TCP_PATH}/client-tcp-443.ovpn -H "<b>[ ✅ Connection is Ready! ]</b> "$'\n\n'"🔴 TCP Protocol "$'\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
+    exec /bin/bash telegram -f /root/${HOSTNAME}-${IP}-tcp.ovpn -H "<b>[ ✅ Connection is Ready! ]</b> "$'\n\n'"🔴 TCP Protocol "$'\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
 
 
 fi
