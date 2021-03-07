@@ -84,7 +84,7 @@ if [[ -f "${UDP_PATH}/client-udp-1194.ovpn" ]]; then
     # wait for network
     until ping -c1 www.google.com >/dev/null 2>&1; do sleep 5; done
 
-    cp ${UDP_PATH}/client-udp-443.ovpn /root/${HOSTNAME}-${IP}-udp.ovpn
+    cp ${UDP_PATH}/client-udp-1194.ovpn /root/${HOSTNAME}-${IP}-udp.ovpn
 
     touch /root/udp-sent
 
