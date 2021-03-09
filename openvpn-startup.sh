@@ -20,7 +20,7 @@ rm -rf /etc/telegram.sh
 git clone https://github.com/fabianonline/telegram.sh /etc/telegram.sh
 
 # add telegram to path
-PATH=PATH:/etc/telegram.sh
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/etc/telegram.sh
 export PATH
 
 # set Enviroments for telegram sender
