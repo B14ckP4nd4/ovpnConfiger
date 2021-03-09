@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# wait for network
+
+until ping -c1 www.google.com >/dev/null 2>&1; do sleep 20; done;
+
 # enable debuging
 set -ex
 
@@ -26,6 +30,10 @@ echo "TCP_PATH=\"/home/ovpn-tcp/client\"" >> /etc/telegram.sh.conf
 echo "IP=$(wget -qO- http://ipecho.net/plain | xargs echo)" >> /etc/telegram.sh.conf
 
 PASSWORD=${3}
+
+# download installer
+wget https://raw.githubusercontent.com/B14ckP4nd4/ovpnConfiger/master/passless-configure.sh -O ovpn.sh
+chmod +x ovpn.sh
 
 # add ENVs
 source /etc/telegram.sh.conf
@@ -54,7 +62,6 @@ cat <<EOT >> /root/telegram-config-sender.sh
 
     # self destroy
    rm -rf $0
-
 EOT
 
 
@@ -132,15 +139,4 @@ EOT
 # remove it
 rm -rf $0
 
-# download configurator
-#/usr/bin/wget https://git.io/JtLfM -O /root/ovpn.sh
-
-# set permitions
-#chmod +x /root/ovpn.sh
-
-# set cronJob for running ovpn.sh ( without using " /bin/bash & /bin/sh in thirt level " )
-# { crontab -l; echo "@reboot . /root/ovpn.sh ${PASSWORD}"; } | crontab -
-# run it with Password
-#exec /bin/bash /root/ovpn.sh $PASSWORD
-#reboot for run this MTF
-#reboot now
+exec /bin/bash ovpn.sh $PASSWORD

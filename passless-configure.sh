@@ -30,6 +30,7 @@ if [[ $1 ]]; then
   echo "start configure \n"
 
   yes | yum update -y
+  
   cd /etc/
   #remove old repos
   yes | rm -rf gck
