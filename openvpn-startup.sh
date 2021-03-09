@@ -19,6 +19,10 @@ yes | yum install git -y
 rm -rf /etc/telegram.sh
 git clone https://github.com/fabianonline/telegram.sh /etc/telegram.sh
 
+# add telegram to path
+PATH=PATH:/etc/telegram.sh
+export PATH
+
 # set Enviroments for telegram sender
 # regenerate config file
 rm -rf /etc/telegram.sh.conf
