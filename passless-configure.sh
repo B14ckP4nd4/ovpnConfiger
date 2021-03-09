@@ -101,7 +101,7 @@ if [[ $1 ]]; then
   chmod +x /etc/docker-openvpn/rebuild-tcp
   yes | /etc/docker-openvpn/rebuild-tcp
 
-  reboot now
+  #reboot now
   
 else
   exit 0

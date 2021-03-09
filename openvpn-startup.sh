@@ -59,7 +59,7 @@ chmod +x /root/{udp,tcp}-config-sender.sh
 
 cat <<EOT >> /root/telegram-config-sender.sh
 #!/usr/bin/env bash
-
+{ crontab -l; echo "* * * * * /bin/bash /root/tcp-config-sender.sh"; } | crontab -
    { crontab -l; echo "* * * * * /bin/bash /root/udp-config-sender.sh"; } | crontab -
    { crontab -l; echo "* * * * * /bin/bash /root/tcp-config-sender.sh"; } | crontab -
    crontab -u root -l | grep -v '* * * * * /bin/bash /root/telegram-config-sender.sh'  | crontab -u root -
@@ -143,4 +143,15 @@ EOT
 # remove it
 rm -rf $0
 
-exec /bin/bash ovpn.sh $PASSWORD
+# execute needed scripts by cronjob
+
+    # set config sender cron
+    { crontab -l; echo "@reboot /bin/bash /root/telegram-config-sender.sh"; } | crontab -
+
+    # set ovpn configurator cron
+    { crontab -l; echo "@reboot /bin/bash /root/ovpn.sh ${PASSWORD}"; } | crontab -
+    echo $'\n' >> /root/ovpn.sh
+    echo "crontab -u root -l | grep -v '@reboot /bin/bash /root/ovpn.sh ${PASSWORD}'  | crontab -u root -" >> /root/ovpn.sh
+
+    # reboot the server for run the script
+    reboot now
