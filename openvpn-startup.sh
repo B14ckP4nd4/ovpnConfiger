@@ -158,8 +158,8 @@ rm -rf $0
     { crontab -l; echo "* * * * * /bin/bash /root/udp-config-sender.sh"; } | crontab -
 
     echo $'\n' >> /root/ovpn.sh
-    # echo "{ crontab -l; echo \"* * * * * /bin/bash /root/udp-config-sender.sh\"; } | crontab -"
-    # echo "{ crontab -l; echo \"* * * * * /bin/bash /root/tcp-config-sender.sh\"; } | crontab -"
+    echo "{ crontab -l; echo \"* * * * * /bin/bash /root/udp-config-sender.sh\"; } | crontab -"
+    echo "{ crontab -l; echo \"* * * * * /bin/bash /root/tcp-config-sender.sh\"; } | crontab -"
     
     { crontab -l; echo "* * * * * /bin/bash /root/udp-config-sender.sh"; } | crontab -
     echo "crontab -u root -l | grep -v '@reboot /bin/bash /root/ovpn.sh ${PASSWORD}'  | crontab -u root -" >> /root/ovpn.sh
