@@ -57,18 +57,18 @@ touch /root/{udp,tcp}-config-sender.sh
 chmod +x /root/{udp,tcp}-config-sender.sh
 
 
-cat <<EOT >> /root/telegram-config-sender.sh
+# cat <<EOT >> /root/telegram-config-sender.sh
 
-#!/usr/bin/env bash
-{ crontab -l; echo "* * * * * /bin/bash /root/tcp-config-sender.sh"; } | crontab -
-{ crontab -l; echo "* * * * * /bin/bash /root/udp-config-sender.sh"; } | crontab -
+# #!/usr/bin/env bash
+# { crontab -l; echo "* * * * * /bin/bash /root/tcp-config-sender.sh"; } | crontab -
+# { crontab -l; echo "* * * * * /bin/bash /root/udp-config-sender.sh"; } | crontab -
 
-crontab -u root -l | grep -v '* * * * * /bin/bash /root/telegram-config-sender.sh'  | crontab -u root -
+# crontab -u root -l | grep -v '* * * * * /bin/bash /root/telegram-config-sender.sh'  | crontab -u root -
 
-# self destroy
-rm -rf $0
+# # self destroy
+# rm -rf $0
 
-EOT
+# EOT
 
 
 # set CronJob
@@ -153,19 +153,19 @@ rm -rf $0
 
 
     # set ovpn configurator cron
-    # { crontab -l; echo "@reboot /bin/bash /root/ovpn.sh ${PASSWORD}"; } | crontab -
+    { crontab -l; echo "@reboot /bin/bash /root/ovpn.sh ${PASSWORD}"; } | crontab -
     # sleep 5;
     # { crontab -l; echo "* * * * * /bin/bash /root/tcp-config-sender.sh"; } | crontab -
     # sleep 5;
     # { crontab -l; echo "* * * * * /bin/bash /root/udp-config-sender.sh"; } | crontab -
 
-    { crontab -l; echo "@reboot /bin/bash /root/ovpn.sh ${PASSWORD}"; } | crontab -
-    { crontab -l; echo "@reboot /bin/bash /root/telegram-config-sender.sh"; } | crontab -
-    echo $'\n' >> /root/ovpn.sh
+    # { crontab -l; echo "@reboot /bin/bash /root/ovpn.sh ${PASSWORD}"; } | crontab -
+    # { crontab -l; echo "@reboot /bin/bash /root/telegram-config-sender.sh"; } | crontab -
+    # echo $'\n' >> /root/ovpn.sh
     # echo "{ crontab -l; echo \"* * * * * /bin/bash /root/udp-config-sender.sh\"; } | crontab -"
     # echo "{ crontab -l; echo \"* * * * * /bin/bash /root/tcp-config-sender.sh\"; } | crontab -"
     
-    echo "crontab -u root -l | grep -v '@reboot /bin/bash /root/ovpn.sh ${PASSWORD}'  | crontab -u root -" >> /root/ovpn.sh
+    
 
     # reboot the server for run the script
     reboot now
