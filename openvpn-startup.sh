@@ -152,24 +152,23 @@ telegram -H "start running configurator"
 # execute needed scripts by cronjob
 
 
-    # set config sender cron
-    # { crontab -l; echo "@reboot /bin/bash /root/telegram-config-sender.sh"; } | crontab -
+# set config sender cron
+# { crontab -l; echo "@reboot /bin/bash /root/telegram-config-sender.sh"; } | crontab -
+
+# set ovpn configurator cron
+# { crontab -l; echo "@reboot /bin/bash /root/ovpn.sh ${PASSWORD}"; } | crontab -
+# sleep 5;
+# { crontab -l; echo "* * * * * /bin/bash /root/tcp-config-sender.sh"; } | crontab -
+# sleep 5;
+# { crontab -l; echo "* * * * * /bin/bash /root/udp-config-sender.sh"; } | crontab -
+
+# { crontab -l; echo "@reboot /bin/bash /root/ovpn.sh ${PASSWORD}"; } | crontab -
+# { crontab -l; echo "@reboot /bin/bash /root/telegram-config-sender.sh"; } | crontab -
+# echo $'\n' >> /root/ovpn.sh
+# echo "{ crontab -l; echo \"* * * * * /bin/bash /root/udp-config-sender.sh\"; } | crontab -"
+# echo "{ crontab -l; echo \"* * * * * /bin/bash /root/tcp-config-sender.sh\"; } | crontab -"
 
 
-    # set ovpn configurator cron
-    # { crontab -l; echo "@reboot /bin/bash /root/ovpn.sh ${PASSWORD}"; } | crontab -
-    # sleep 5;
-    # { crontab -l; echo "* * * * * /bin/bash /root/tcp-config-sender.sh"; } | crontab -
-    # sleep 5;
-    # { crontab -l; echo "* * * * * /bin/bash /root/udp-config-sender.sh"; } | crontab -
 
-    # { crontab -l; echo "@reboot /bin/bash /root/ovpn.sh ${PASSWORD}"; } | crontab -
-    # { crontab -l; echo "@reboot /bin/bash /root/telegram-config-sender.sh"; } | crontab -
-    # echo $'\n' >> /root/ovpn.sh
-    # echo "{ crontab -l; echo \"* * * * * /bin/bash /root/udp-config-sender.sh\"; } | crontab -"
-    # echo "{ crontab -l; echo \"* * * * * /bin/bash /root/tcp-config-sender.sh\"; } | crontab -"
-    
-    
-
-    # reboot the server for run the script
-    reboot now
+# reboot the server for run the script
+reboot now
