@@ -107,9 +107,6 @@ else
   exit 0
 fi
 
-
-crontab -u root -l | grep -v "@reboot /bin/bash /root/ovpn.sh ${1}"  | crontab -u root -
-
 { crontab -l; echo "* * * * * /bin/bash /root/udp-config-sender.sh"; } | crontab - \
 && { crontab -l; echo "* * * * * /bin/bash /root/tcp-config-sender.sh"; } | crontab -
 

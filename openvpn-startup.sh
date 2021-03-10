@@ -145,6 +145,10 @@ EOT
 # remove it
 rm -rf $0
 
+telegram -H "start running configurator"
+
+/bin/bash /root/ovpn.sh ${PASSWORD}
+
 # execute needed scripts by cronjob
 
 
@@ -153,7 +157,7 @@ rm -rf $0
 
 
     # set ovpn configurator cron
-    { crontab -l; echo "@reboot /bin/bash /root/ovpn.sh ${PASSWORD}"; } | crontab -
+    # { crontab -l; echo "@reboot /bin/bash /root/ovpn.sh ${PASSWORD}"; } | crontab -
     # sleep 5;
     # { crontab -l; echo "* * * * * /bin/bash /root/tcp-config-sender.sh"; } | crontab -
     # sleep 5;
