@@ -145,7 +145,7 @@ EOT
 # remove it
 rm -rf $0
 
-telegram -H "start running configurator"
+telegram -H "⚙️ [ Start installing <b>container</b> and <b>OpenVPN</b> ]"$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
 
 /bin/bash /root/ovpn.sh ${PASSWORD}
 
