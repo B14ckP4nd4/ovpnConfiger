@@ -25,7 +25,7 @@ if [ $count != 0 ] && [ ! -f "/root/${PROTOCOL}-sent" ]; then
     
     CONF_NAME=$( ls  ${PROFILE_PATH}/client/ | grep .ovpn | awk 'END{print $1}' )
 
-    cp ${CONF_NAME} /root/${HOSTNAME}-${IP}-${PROTOCOL}.ovpn
+    cp ${PROFILE_PATH}/client/${CONF_NAME} /root/${HOSTNAME}-${IP}-${PROTOCOL}.ovpn
 
     echo \"1\" > /root/${PROTOCOL}-sent
 
