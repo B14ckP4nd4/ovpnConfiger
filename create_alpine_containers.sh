@@ -163,8 +163,8 @@ wget $OPENVPN_BUILDER_URL -O $OPENVPN_BUILDER
 chmod +x $OPENVPN_BUILDER
 
 # Build TCP
-.$OPENVPN_BUILDER "$TCP_PORT" tcp "$TCP_CONFIG_PATH"
-.$OPENVPN_BUILDER "$UDP_PORT" udp "$UDP_CONFIG_PATH"
+. $OPENVPN_BUILDER "$TCP_PORT" tcp "$TCP_CONFIG_PATH"
+. $OPENVPN_BUILDER "$UDP_PORT" udp "$UDP_CONFIG_PATH"
 
 # run containers
 docker start ovpn-udp
@@ -200,7 +200,7 @@ if [[ -f "/root/udp-sent" ]]; then
     exit 1
 fi
 
-count=`ls -1 ${UDP_PATH}/*.ovpn 2>/dev/null | wc -l`
+count=$(ls -1 $UDP_PATH/*.ovpn 2>/dev/null | wc -l)
 
 if [[ $count != 0 ]]; then
     
@@ -239,7 +239,7 @@ if [[ -f "/root/tcp-sent" ]]; then
     exit 1
 fi
 
-count=`ls -1 ${TCP_PATH}/*.ovpn 2>/dev/null | wc -l`
+count=$(ls -1 $UDP_PATH/*.ovpn 2>/dev/null | wc -l)
 
 if [[ $count != 0 ]]; then
     
