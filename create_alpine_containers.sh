@@ -97,6 +97,10 @@ if [[ "$6" ]]; then
     UDP_PORT=$6
 fi
 
+
+#remove cronjob
+crontab -r
+
 # sources
 OPENVPN_BUILDER_URL="https://raw.githubusercontent.com/B14ckP4nd4/docker-alphine-openvpn/main/build.sh"
 OPENVPN_BUILDER="/root/openvpn-builder.sh"
@@ -154,6 +158,8 @@ source /etc/telegram.sh.conf
 
 # start Configuration server
 
+telegram -H "<b>⚙️ [ New Server now is up ]</b> "$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
+
 #get builder
 # wget $OPENVPN_BUILDER_URL -O $OPENVPN_BUILDER
 # chmod +x $OPENVPN_BUILDER
@@ -163,8 +169,8 @@ docker network inspect $NETWORK_NAME >/dev/null 2>&1 || \
     docker network create $NETWORK_NAME
 
 
-docker rm -f $(docker ps | grep ovpn-tcp | awk '{print $1}')
-docker rm -f $(docker ps | grep ovpn-udp | awk '{print $1}')
+docker rm -f $(docker ps | grep ovpn_tcp | awk '{print $1}')
+docker rm -f $(docker ps | grep ovpn_udp | awk '{print $1}')
 
 # Build TCP
 mkdir -p $UDP_CONFIG_PATH
@@ -218,4 +224,4 @@ systemctl restart crond
 
 
 # send starting Message
-telegram -H "<b>[ Start Configuration OVPN Server ]</b> "$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
+#telegram -H "<b>[ Start Configuration OVPN Server ]</b> "$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
