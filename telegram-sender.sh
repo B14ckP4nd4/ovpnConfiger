@@ -19,7 +19,7 @@ if [[ -f "/root/${PROTOCOL}-sent" ]]; then
     exit 1
 fi
 
-count=$(ls -1 ${PROFILE_PATH}/*.ovpn 2>/dev/null | wc -l)
+count=$(ls -1 ${PROFILE_PATH}/client/*.ovpn 2>/dev/null | wc -l)
 
 if [ $count != 0 ] && [ ! -f "/root/${PROTOCOL}-sent" ]; then
     

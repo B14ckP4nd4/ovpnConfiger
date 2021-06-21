@@ -65,7 +65,6 @@ cat << EOF
                         https://github.com/B14ckP4nd4                                                                     
 EOF
 
-
 TCP_CONFIG_PATH="/home/ovpn/tcp"
 UDP_CONFIG_PATH="/home/ovpn/udp"
 TCP_PORT=443
@@ -153,10 +152,6 @@ cat /root/ovpn_envs.conf >> /etc/telegram.sh.conf
 # add ENVs
 source /etc/telegram.sh.conf
 
-# send starting Message
-telegram -H "<b>[ Start Configuration OVPN Server ]</b> "$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
-
-
 # start Configuration server
 
 #get builder
@@ -191,6 +186,7 @@ docker create \
   b14ckp4nd4/alphine-openvpn:0.1
 
 mkdir -p $TCP_CONFIG_PATH
+
 # Create Container
 docker create \
   --cap-add=NET_ADMIN \
@@ -207,96 +203,22 @@ docker create \
 
 
 # run containers
-docker start ovpn-udp
-docker start ovpn-tcp
+docker start ovpn_udp
+docker start ovpn_tcp
 
 
 # create connections senders script
-rm -rf /root/{udp,tcp}-config-sender.sh
-touch /root/{udp,tcp}-config-sender.sh
-chmod +x /root/{udp,tcp}-config-sender.sh
+wget https://raw.githubusercontent.com/B14ckP4nd4/ovpnConfiger/alpine/telegram-sender.sh -O /root/telegram-sender.sh
+chmod +x /root/telegram-sender.sh
 
-
-cat <<EOT >> /root/udp-config-sender.sh
-#!/bin/bash
-
-# wait for network
-until ping -c1 www.google.com >/dev/null 2>&1; do sleep 5; done
-
-set -ex
-
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/etc/telegram.sh
-source /etc/telegram.sh.conf
-
-if [[ -f "/root/udp-sent" ]]; then
-
-    # remove scripts
-    rm -rf /root/udp-sent
-    rm -rf $0
-
-    # disable cronjob
-    crontab -u root -l | grep -v '* * * * * /bin/bash /root/udp-config-sender.sh'  | crontab -u root -
-
-    exit 1
-fi
-
-count=$(ls -1 $UDP_PATH/*.ovpn 2>/dev/null | wc -l)
-
-if [[ $count != 0 ]]; then
-    
-    CONF_NAME=$( ls  ${UDP_PATH}/client/ | grep .ovpn | awk 'END{print $1}' )
-
-    cp ${CONF_NAME} /root/${HOSTNAME}-${IP}-udp.ovpn
-
-    echo \"1\" > /root/udp-sent
-
-    # send them to telegram
-    exec /bin/bash telegram -f /root/${HOSTNAME}-${IP}-udp.ovpn -H "<b>[ ✅ Connection is Ready! ]</b> "$'\n\n'"🔵 UDP Protocol "$'\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
-fi
-
-EOT
-
-cat <<EOT >> /root/tcp-config-sender.sh
-#!/bin/bash
-
-# wait for network
-until ping -c1 www.google.com >/dev/null 2>&1; do sleep 5; done
-
-set -ex
-
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/etc/telegram.sh
-source /etc/telegram.sh.conf
-
-if [[ -f "/root/tcp-sent" ]]; then
-
-    # remove scripts
-    rm -rf /root/tcp-sent
-    rm -rf $0
-
-    # disable cronjob
-    crontab -u root -l | grep -v '* * * * * /bin/bash /root/tcp-config-sender.sh'  | crontab -u root -
-
-    exit 1
-fi
-
-count=$(ls -1 $UDP_PATH/*.ovpn 2>/dev/null | wc -l)
-
-if [[ $count != 0 ]]; then
-    
-    CONF_NAME=$( ls  ${TCP_PATH}/client/ | grep .ovpn | awk 'END{print $1}' )
-
-    cp ${CONF_NAME} /root/${HOSTNAME}-${IP}-tcp.ovpn
-
-    echo \"1\" > /root/tcp-sent
-
-    # send them to telegram
-    exec /bin/bash telegram -f /root/${HOSTNAME}-${IP}-tcp.ovpn -H "<b>[ ✅ Connection is Ready! ]</b> "$'\n\n'"🔴 TCP Protocol "$'\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
-fi
-EOT
 
 # add to crontab
-{ crontab -l; echo "* * * * * /bin/bash /root/udp-config-sender.sh"; } | crontab - \
-&& { crontab -l; echo "* * * * * /bin/bash /root/tcp-config-sender.sh"; } | crontab -
+{ crontab -l; echo "* * * * * /bin/bash /root/telegram-sender.sh tcp ${TCP_CONFIG_PATH}"; } | crontab - \
+&& { crontab -l; echo "* * * * * /bin/bash /root/telegram-sender.sh udp ${UDP_CONFIG_PATH}"; } | crontab -
 
 # reset crontab
 systemctl restart crond
+
+
+# send starting Message
+#telegram -H "<b>[ Start Configuration OVPN Server ]</b> "$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
