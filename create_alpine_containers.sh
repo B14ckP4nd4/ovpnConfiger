@@ -158,9 +158,6 @@ source /etc/telegram.sh.conf
 # wget $OPENVPN_BUILDER_URL -O $OPENVPN_BUILDER
 # chmod +x $OPENVPN_BUILDER
 
-# create Network
-yes | docker system prune
-
 # network configuration
 docker network inspect $NETWORK_NAME >/dev/null 2>&1 || \
     docker network create $NETWORK_NAME
@@ -221,4 +218,4 @@ systemctl restart crond
 
 
 # send starting Message
-#telegram -H "<b>[ Start Configuration OVPN Server ]</b> "$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
+telegram -H "<b>[ Start Configuration OVPN Server ]</b> "$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
