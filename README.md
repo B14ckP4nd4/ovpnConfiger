@@ -1,3 +1,3 @@
 # ovpnConfiger
 
-`wget https://git.io/JUBgR -O ovpn-configer.sh && chmod +x ovpn-configer.sh && bash ovpn-configer.sh`
+just download bash script and run it with Args
