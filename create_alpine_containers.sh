@@ -164,16 +164,22 @@ telegram -H "<b>[ Start Configuration OVPN Server ]</b> "$'\n\n'"⚡️ Server I
 # chmod +x $OPENVPN_BUILDER
 
 # create Network
+yes | docker system prune
+
 # network configuration
 docker network inspect $NETWORK_NAME >/dev/null 2>&1 || \
     docker network create $NETWORK_NAME
+
+
+docker rm -f $(docker ps | grep ovpn-tcp | awk '{print $1}')
+docker rm -f $(docker ps | grep ovpn-udp | awk '{print $1}')
 
 # Build TCP
 mkdir -p $UDP_CONFIG_PATH
 # Create Container
 docker create \
   --cap-add=NET_ADMIN \
-  --name=opvn_udp \
+  --name=ovpn_udp \
   --network=$NETWORK_NAME \
   --privileged \
   -e PROTO=udp \
@@ -188,13 +194,13 @@ mkdir -p $TCP_CONFIG_PATH
 # Create Container
 docker create \
   --cap-add=NET_ADMIN \
-  --name=opvn_udp \
+  --name=ovpn_tcp \
   --network=$NETWORK_NAME \
   --privileged \
-  -e PROTO=udp \
-  -e PORT=1194 \
+  -e PROTO=tcp \
+  -e PORT=443 \
   -e INTERFACE='eth0' \
-  -p $TCP_PORT:1194/udp \
+  -p $TCP_PORT:443/tcp \
   -v $TCP_CONFIG_PATH:/config \
   --restart always \
   b14ckp4nd4/alphine-openvpn:0.1
