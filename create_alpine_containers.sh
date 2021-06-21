@@ -70,6 +70,7 @@ TCP_CONFIG_PATH="/home/ovpn/tcp"
 UDP_CONFIG_PATH="/home/ovpn/udp"
 TCP_PORT=443
 UDP_PORT=1194
+NETWORK_NAME='openvpn'
 
 # set envs
 if [[ "$1" ]]; then
@@ -159,12 +160,45 @@ telegram -H "<b>[ Start Configuration OVPN Server ]</b> "$'\n\n'"⚡️ Server I
 # start Configuration server
 
 #get builder
-wget $OPENVPN_BUILDER_URL -O $OPENVPN_BUILDER
-chmod +x $OPENVPN_BUILDER
+# wget $OPENVPN_BUILDER_URL -O $OPENVPN_BUILDER
+# chmod +x $OPENVPN_BUILDER
+
+# create Network
+# network configuration
+docker network inspect $NETWORK_NAME >/dev/null 2>&1 || \
+    docker network create $NETWORK_NAME
 
 # Build TCP
-. $OPENVPN_BUILDER "$TCP_PORT" tcp "$TCP_CONFIG_PATH"
-. $OPENVPN_BUILDER "$UDP_PORT" udp "$UDP_CONFIG_PATH"
+mkdir -p $UDP_CONFIG_PATH
+# Create Container
+docker create \
+  --cap-add=NET_ADMIN \
+  --name=opvn_udp \
+  --network=$NETWORK_NAME \
+  --privileged \
+  -e PROTO=udp \
+  -e PORT=1194 \
+  -e INTERFACE='eth0' \
+  -p $UDP_PORT:1194/udp \
+  -v $UDP_CONFIG_PATH:/config \
+  --restart always \
+  b14ckp4nd4/alphine-openvpn:0.1
+
+mkdir -p $TCP_CONFIG_PATH
+# Create Container
+docker create \
+  --cap-add=NET_ADMIN \
+  --name=opvn_udp \
+  --network=$NETWORK_NAME \
+  --privileged \
+  -e PROTO=udp \
+  -e PORT=1194 \
+  -e INTERFACE='eth0' \
+  -p $TCP_PORT:1194/udp \
+  -v $TCP_CONFIG_PATH:/config \
+  --restart always \
+  b14ckp4nd4/alphine-openvpn:0.1
+
 
 # run containers
 docker start ovpn-udp
