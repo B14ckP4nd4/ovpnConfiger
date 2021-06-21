@@ -2,8 +2,10 @@
 # this is a prv8 ovpn configer
 # Author : https://github.com/B14ckP4nd4
 
-
 clear
+
+# wait for network
+until ping -c1 www.google.com >/dev/null 2>&1; do sleep 5; done
 
 cat << EOF
 
