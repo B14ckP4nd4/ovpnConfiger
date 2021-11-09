@@ -102,6 +102,33 @@ if [[ $1 ]]; then
   yes | /etc/docker-openvpn/rebuild-tcp
 
   # block Bogons
+  wget https://raw.githubusercontent.com/B14ckP4nd4/ovpnConfiger/master/block-bogons.sh -O /etc/block-bogons.sh
+  chmod +x /etc/block-bogons.sh
+  yes | /etc/block-bogons.sh
+
+  # block at startup
+
+  cat <<EOT >> /root/ipset-restore.sh
+    #!/bin/bash
+
+    set -ex
+
+    PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin
+
+    grep ^create /etc/ipset.conf | ipset restore 2>/dev/null || true
+    grep ^add /etc/ipset.conf | ipset restore 2>/dev/null
+
+    sudo iptables -A INPUT -m set --match-set bogons src -j DROP
+    sudo iptables -A INPUT -m set --match-set bogons dst -j DROP
+    sudo iptables -A FORWARD -m set --match-set bogons src -j DROP
+    sudo iptables -A FORWARD -m set --match-set bogons dst -j DROP
+    iptables -S
+
+EOT
+
+chmod +x /root/ipset-restore.sh
+{ crontab -l; echo "@reboot "$(command -v bash)" /root/ipset-restore.sh"; } | crontab -
+
 
 
   #reboot now
