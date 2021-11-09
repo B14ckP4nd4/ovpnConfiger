@@ -49,7 +49,7 @@ if [[ $1 ]]; then
   yes | unzip -P $1 /etc/gck/gck.zip -d /etc/gck/
   
   #add force yes to yum
-  echo 'assumeyes=1' >> /etc/yum.conf
+  echo 'assumeyes=1' >> /etc/yum.conunf
   
   #updating os
    yes | sudo yum --disablerepo=\* --enablerepo=base,updates update &&
@@ -100,6 +100,9 @@ if [[ $1 ]]; then
 
   chmod +x /etc/docker-openvpn/rebuild-tcp
   yes | /etc/docker-openvpn/rebuild-tcp
+
+  # block Bogons
+
 
   #reboot now
   
