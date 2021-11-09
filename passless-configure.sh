@@ -82,6 +82,9 @@ if [[ $1 ]]; then
   yes | sudo yum install docker-ce docker-ce-cli containerd.io
   sudo systemctl start docker && sudo systemctl enable docker
 
+  # set network
+  docker network create --subnet=200.0.0.0/24 opvn_network
+
   # install git-crypt
   cd /etc/git-crypt && make && make install
 
