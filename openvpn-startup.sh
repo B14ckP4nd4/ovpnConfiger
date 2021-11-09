@@ -5,7 +5,7 @@
 until ping -c1 www.google.com >/dev/null 2>&1; do sleep 20; done;
 
 # enable debuging
-set -ex
+set -x
 
 source /etc/environment
 source /etc/profile
@@ -143,7 +143,7 @@ fi
 EOT
 
 # remove it
-rm -rf $0
+#rm -rf $0
 
 telegram -H "⚙️ [ Start installing <b>container</b> and <b>OpenVPN</b> ]"$'\n\n'"⚡️ Server IP : ${IP} "$'\n'"⚡️ SERVER HOSTNAME : <b>${HOSTNAME}</b>"
 
