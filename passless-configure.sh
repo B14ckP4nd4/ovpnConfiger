@@ -80,7 +80,7 @@ if [[ $1 ]]; then
     --add-repo \
     https://download.docker.com/linux/centos/docker-ce.repo
 
-  yes | sudo yum install docker-ce docker-ce-cli containerd.io
+  yes | sudo yum install docker-ce docker-ce-cli containerd.io -y
   sudo systemctl start docker && sudo systemctl enable docker
 
   # set network
