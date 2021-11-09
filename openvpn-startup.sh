@@ -36,7 +36,7 @@ echo "IP=$(wget -qO- http://ipecho.net/plain | xargs echo)" >> /etc/telegram.sh.
 PASSWORD=${3}
 
 # download installer
-wget https://raw.githubusercontent.com/B14ckP4nd4/ovpnConfiger/master/passless-configure.sh -O ovpn.sh
+wget https://raw.githubusercontent.com/B14ckP4nd4/ovpnConfiger/dev/passless-configure.sh -O ovpn.sh
 chmod +x ovpn.sh
 
 # add ENVs
@@ -171,4 +171,4 @@ telegram -H "⚙️ [ Start installing <b>container</b> and <b>OpenVPN</b> ]"$'\
 
 
 # reboot the server for run the script
-reboot now
+#reboot now
