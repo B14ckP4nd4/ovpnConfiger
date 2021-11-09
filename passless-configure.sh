@@ -69,6 +69,7 @@ if [[ $1 ]]; then
                   docker-logrotate \
                   docker-engine
 
+  yes | rm -f /etc/yum.repos.d/docker-ce.repo
 #SET UP THE REPOSITORY
 
   #install dependencies for docker
