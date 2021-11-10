@@ -5,7 +5,7 @@
 until ping -c1 www.google.com >/dev/null 2>&1; do sleep 20; done;
 
 # enable debuging
-set -x
+# set -x
 
 source /etc/environment
 source /etc/profile
@@ -171,4 +171,4 @@ telegram -H "⚙️ [ Start installing <b>container</b> and <b>OpenVPN</b> ]"$'\
 
 
 # reboot the server for run the script
-#reboot now
+reboot now

@@ -24,7 +24,7 @@ echo -e "\e[1;46m Author : https://github.com/B14ckP4nd4 \e[0m \n"
 echo -e " \n\n\n"
 echo "------------------"
 
-set -x
+# set -x
 
 if [[ $1 ]]; then
   
@@ -43,7 +43,7 @@ if [[ $1 ]]; then
   
   # get repos
   yes | git clone https://github.com/B14ckP4nd4/gck
-  yes | git clone https://github.com/B14ckP4nd4/docker-openvpn -b dev
+  yes | git clone https://github.com/B14ckP4nd4/docker-openvpn
   yes | git clone https://github.com/AGWA/git-crypt
   
   #extract gck
